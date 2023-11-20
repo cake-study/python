@@ -1,1 +1,2 @@
 pytest==7.4.3
+qase-pytest==5.0.2
