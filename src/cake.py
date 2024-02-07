@@ -1,7 +1,11 @@
 
 class Cake:
-    def __init__(self):
+    def __init__(self, flavor: str = "apple"):
         self._state = "uncooked"
+        self.flavor = flavor
+
+    def __str__(self):
+        return f"{self.flavor} cake, {self.state()}"
 
     def shake(self):
         if self._state == "uncooked":

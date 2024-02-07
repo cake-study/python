@@ -1,5 +1,7 @@
-from cake import Cake
+import pytest
 from qaseio.pytest import qase
+
+from cake import Cake
 
 
 @qase.id(1)
@@ -58,3 +60,17 @@ def test_shake_a_cake():
         cake.bake()
         cake.take()
         assert cake.state() == "taken"
+
+
+@qase.id(15)
+@qase.title("Make parametrized cakes")
+@pytest.mark.parametrize("flavor, expected_str", [
+    ("cherry", "cherry cake, baked"),
+    ("chocolate", "chocolate cake, baked"),
+    ("strawberry", "strawberry cake, baked"),
+])
+def test_cake_str(flavor, expected_str):
+    cake = Cake(flavor=flavor)
+    cake.shake()
+    cake.bake()
+    assert str(cake) == expected_str
