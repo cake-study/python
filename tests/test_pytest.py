@@ -74,3 +74,32 @@ def test_cake_str(flavor, expected_str):
     cake.shake()
     cake.bake()
     assert str(cake) == expected_str
+
+
+# When we want to make a "parameterized" test, but match each variant
+# to a separate test case at Qase:
+def make_test_function(flavor, expected_str, qase_id):
+    # should have named it test_func,
+    # but then pytest would recognize it as a separate test
+    @qase.id(qase_id)
+    @qase.title(f"Make {flavor} cakes")
+    def func_test():
+        cake = Cake(flavor=flavor)
+        cake.shake()
+        cake.bake()
+        assert str(cake) == expected_str
+
+    func_test.__name__ = f"test_{flavor}_cake"
+    return func_test
+
+
+test_cases = [
+    ("cherry", "cherry cake, baked", 17),
+    ("chocolate", "chocolate cake, baked", 18),
+    ("strawberry", "strawberry cake, baked", 19)
+]
+
+# Dynamically create and add test functions to the global namespace
+for flavor, expected_str, qase_id in test_cases:
+    func_test = make_test_function(flavor, expected_str, qase_id)
+    globals()[func_test.__name__] = func_test
